@@ -11,6 +11,12 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
+    devServer: {
+        static: path.resolve(__dirname, './dist'),
+        compress: true,
+        port: 3000,
+        open: true
+    },
     module: {
         rules: [
             {
@@ -34,7 +40,27 @@ module.exports = {
                 ],
                 include: /src/,
                 exclude: '/node_modules'
-            },
+            },            
+            {
+                test: /\.scss$/,
+                use: [
+                  {
+                    loader: "style-loader"
+                  },
+                  {
+                    loader: "css-loader",
+                    options: {           
+                      modules: {
+                        localIdentName: '[name]__[local]__[hash:base64:5]'
+                      },  
+                    }
+                  },
+                  {
+                      loader: 'sass-loader',
+                      
+                  }
+                ]
+             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 type: 'asset/resource',
