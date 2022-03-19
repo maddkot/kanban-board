@@ -10,12 +10,12 @@ export const Header = () => {
     }, 1000);
 
     return (
-        <div>
-            <div className={styles.app}>
+        <header className={styles.app}>
+            <div className={styles.app__header}>
                 <h1>Kanban</h1>
-                <p>Simple and convenient</p>
+                <p className={styles.app__subtitle}>Simple and convenient</p>
             </div>
-            <p>{date}</p>        
-        </div>
+            <p className={styles.app__date}>{date}</p>        
+        </header>
     )
 }

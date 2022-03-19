@@ -1,3 +1,41 @@
 .app {
-    color: greenyellow;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    color: aliceblue;
+    border-bottom: 1px black solid;
+    
+}
+
+.app__header {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+
+.app__subtitle {
+   margin: 5px 0 20px;
+   font-size: 19px; 
+}
+
+.app__date {
+    margin-top: 20px;
+    margin-right: 50px;
+    font-size: 22px;
+    color: aliceblue;
+}
+
+@media screen and (max-width: 500px) {
+    .app {
+        flex-direction:column;
+        align-items: baseline;
+    }
+    .app__header {
+        margin-left: 0;
+    }
+    .app__date {
+        margin-right: 0;
+    }
 }
