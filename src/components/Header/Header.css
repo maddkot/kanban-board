@@ -4,9 +4,9 @@
     justify-content: space-between;
     align-items: center;
     align-content: center;
-    color: aliceblue;
+    color: rgb(121, 106, 86);
     border-bottom: 1px black solid;
-    
+    margin-bottom: 20px;
 }
 
 .app__header {
@@ -24,7 +24,7 @@
     margin-top: 20px;
     margin-right: 50px;
     font-size: 22px;
-    color: aliceblue;
+    color: rgb(121, 106, 86);;
 }
 
 @media screen and (max-width: 500px) {

@@ -7,7 +7,7 @@ import githubLogo from '../../images/github_logo.png'
     const actualYear = data.getFullYear() 
     return (
         <footer className={styles.footer}>
-            <p>&copy; {actualYear} Rengevich Sergei</p>
+            <p style={{marginRight: 5}}>&copy; {actualYear} Rengevich Sergei</p>
             <a href="https://github.com/maddkot" target="_blank" rel="noreferrer">
                 <img  alt="Иконка гитхаб" src={githubLogo}></img>
             </a>
