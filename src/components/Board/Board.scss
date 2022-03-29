@@ -1,6 +1,6 @@
 @import '../../styles//variables.scss';
 
-.card {
+.board {
     height: 550px;
     min-height: fit-content;
     max-width: 300px;
@@ -46,18 +46,43 @@
         
     }
 
-    &__add {
+    &__addBox {
         width: 100%;        
         border-radius: 10px;
         text-align: center;
-        cursor: pointer;
-        border: none;
+        
+        
         opacity: .2;
         background-color: $deleteButtonBGC;
+
+        &:hover {
+            opacity: 1.2;
+            transition: opacity 0.4s linear;
+        }
+
+        &__input {
+            width: 98%;        
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid;
+            background-color: $deleteButtonBGC;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        &__button {
+            width: 100%;        
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid;
+            background-color: $deleteButtonBGC;
+        }
     }
 
-    &__add:hover {
-        opacity: 1.2;
-        transition: opacity 0.4s linear;
-    }
+
+    
+}
+
+.dragBackground {
+    background: black //$dragBackgroundColor;
 }

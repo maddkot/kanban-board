@@ -1,0 +1,29 @@
+@import '../../styles/variables.scss';
+
+.task {
+    width: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+        flex-grow: 1;
+        width: 100%;        
+        overflow: auto;
+    }
+
+    &__button {
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        border: none;
+        background-color: $backgroundColor;
+        opacity: 0.2;        
+
+        &:hover {
+            opacity: 1.2;
+            transition: opacity 0.4s linear;
+            cursor: pointer;
+        }
+    }
+}
