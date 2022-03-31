@@ -5,7 +5,7 @@ import Board from '../Board/Board';
 
 type TTask = {
     id: number,
-    order: number
+    order: number,
     title: string,
 }
 
@@ -17,21 +17,24 @@ type TBoard = {
 }
 
 
+
 const Main: React.FC = () => {
 
-    const [board, setBoard] = useState<any[]>([
-        {
-            id: 1, order: 1, title: 'First test', items: [
-                { id: 1, order: 1, title: 'test task' }]
-        },
-    ]);
+    const [board, setBoard] = useState<any[]>([]);
     
     const [currentBoard, setCurrentBoard] = useState<TBoard>();
     const [titleBoard, setTitleBoard] = useState('');
-    
+    const [startBoardId, setStartBoardId] = useState<number>();
+    const [startTask, setStartTask] = useState<TTask>();
+
 
     const setCurrentBoardHandler = (item: TBoard) => {
         setCurrentBoard(item);
+    }
+
+    const setIdboardAndTaskHandler = (idBoard: number, item: TTask) => {
+        setStartBoardId(idBoard);
+        setStartTask(item);
     }
 
     const sortBoard = (a: TBoard, b: TBoard) => {
@@ -45,29 +48,47 @@ const Main: React.FC = () => {
     const changeOrder = (paramBoard: TBoard) => {
         
         let changeOrderArr = board.map((item) => {
-            /* if (item.id === paramBoard.id) {                
-                return { ...item, order: currentBoard?.order }
-            }
-            if (item.id === currentBoard?.id) {                
-                return { ...item, order: paramBoard.order }
-            }
-            return item */
             switch (item.id) {
                 case paramBoard.id:
-                    return { ...item, order: currentBoard?.order }
+                    return { ...item, order: currentBoard!.order }
                     break
-                case currentBoard?.id:
+                case currentBoard!.id:
                     return { ...item, order: paramBoard.order }
                     break
                 default:
                     return item
             }
-        }).sort(sortBoard);
-        console.log(changeOrderArr, 'changeOrderArr'); 
+        }).sort(sortBoard);         
         setBoard(changeOrderArr)
     }
 
+    const changeTask = (/* itemTaskDrop: TTask, */ idBoardDrop:number) => {
+        console.log(/* itemTaskDrop, */ idBoardDrop, startBoardId, startTask, 'changeTask');
+        
+        let newBoard = board.map((item: TBoard) => {
+            
+            if (item.id !== idBoardDrop && item.id === startBoardId) {
+                console.log('доска не вернулась');
 
+                const deleteTaskArr = item.items.filter((item) => {
+                    return item.id !== startTask!.id
+                });
+                return { ...item, items: deleteTaskArr }
+            }
+            if (item.id === idBoardDrop && item.id !== startBoardId) {
+                const newArrAdd = [...item.items, startTask];
+                console.log(newArrAdd, 'newArrAdd')
+                return {...item, items: newArrAdd}
+            }
+            if (item.items.length === 0 && item.id === idBoardDrop) {
+                const newArr = [...item.items, startTask];
+                return {...item, items: newArr}
+            }
+            else return item;
+        })  
+        console.log(newBoard, 'newBoard');
+        setBoard(newBoard);
+    }
 
     const handleChange = (event: React.FormEvent) => {
         const target = event.target as HTMLInputElement;
@@ -99,8 +120,17 @@ const Main: React.FC = () => {
         setBoard(newBoardAndTask);        
     }
 
-    const deleteTask = () => {
-        
+    const deleteTask = (task: TTask, idBoard: number) => {
+        console.log(task, idBoard);
+        let newBoardRemoveTask = board.map((board: TBoard) => {
+            if (board.id === idBoard) {
+                const filterTasks = board.items.filter((item) => {
+                    return item.id !== task.id
+                })
+                return {...board, items: filterTasks}
+            } else {return board}
+        })        
+        setBoard(newBoardRemoveTask);
     }
 
     useEffect(() => {
@@ -129,7 +159,10 @@ const Main: React.FC = () => {
                             deleteBoard={deleteBoard}
                             setCurrentBoardHandler={setCurrentBoardHandler}
                             changeOrder={changeOrder}                            
-                            addTaskOnBoard={addTaskOnBoard}                            
+                            addTaskOnBoard={addTaskOnBoard}
+                            deleteTask={deleteTask}
+                            changeTask={changeTask}
+                            setIdboardAndTaskHandler={setIdboardAndTaskHandler}                            
                         />
                     ))
                 }
