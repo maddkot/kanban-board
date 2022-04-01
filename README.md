@@ -1,3 +1,9 @@
 # kanban-board
 
-in work
+Мини-проект менеджера задач по методологии Kanban.
+
+Сайт написан с использованием:
+    * React
+    * TypeScript
+    * SCSS
+    * Webpack

@@ -26,7 +26,7 @@ const Main: React.FC = () => {
     const [titleBoard, setTitleBoard] = useState('');
     const [startBoardId, setStartBoardId] = useState<number>();
     const [startTask, setStartTask] = useState<TTask>();
-
+    const [stateDisabled, setStateDisabled] = useState<boolean>(true);
 
     const setCurrentBoardHandler = (item: TBoard) => {
         setCurrentBoard(item);
@@ -50,62 +50,71 @@ const Main: React.FC = () => {
         let changeOrderArr = board.map((item) => {
             switch (item.id) {
                 case paramBoard.id:
-                    return { ...item, order: currentBoard!.order }
-                    break
+                    return { ...item, order: currentBoard!.order }                    
                 case currentBoard!.id:
-                    return { ...item, order: paramBoard.order }
-                    break
+                    return { ...item, order: paramBoard.order }                    
                 default:
                     return item
             }
         }).sort(sortBoard);         
-        setBoard(changeOrderArr)
+        setBoard(changeOrderArr);
+        localStorage.setItem('boards', JSON.stringify(changeOrderArr))
     }
 
     const changeTask = (/* itemTaskDrop: TTask, */ idBoardDrop:number) => {
         console.log(/* itemTaskDrop, */ idBoardDrop, startBoardId, startTask, 'changeTask');
         
-        let newBoard = board.map((item: TBoard) => {
-            
-            if (item.id !== idBoardDrop && item.id === startBoardId) {
-                console.log('доска не вернулась');
-
-                const deleteTaskArr = item.items.filter((item) => {
-                    return item.id !== startTask!.id
-                });
-                return { ...item, items: deleteTaskArr }
-            }
-            if (item.id === idBoardDrop && item.id !== startBoardId) {
-                const newArrAdd = [...item.items, startTask];
-                console.log(newArrAdd, 'newArrAdd')
-                return {...item, items: newArrAdd}
-            }
-            if (item.items.length === 0 && item.id === idBoardDrop) {
-                const newArr = [...item.items, startTask];
-                return {...item, items: newArr}
-            }
-            else return item;
-        })  
-        console.log(newBoard, 'newBoard');
-        setBoard(newBoard);
+        if (idBoardDrop !== undefined && startBoardId !== undefined && startTask !== undefined ) {
+            let newBoard = board.map((item: TBoard) => {
+               
+                if (item.id !== idBoardDrop && item.id === startBoardId) {
+                    console.log('first if')
+                    const deleteTaskArr = item.items.filter((item) => {
+                        return item.id !== startTask.id
+                    });
+                    return { ...item, items: deleteTaskArr }
+                }
+                if (item.id === idBoardDrop && item.id !== startBoardId) {
+                    console.log('second if')
+                    const newArrAdd = [...item.items, startTask];
+                    console.log(newArrAdd, 'newArrAdd')
+                    return { ...item, items: newArrAdd }
+                }
+                /* if (item.items.length === 0 && item.id !== idBoardDrop) {
+                    const newArr = [...item.items, startTask];
+                    return {...item, items: newArr}
+                } */
+                else {
+                    console.log('if else')
+                    return item;
+                }
+            });  
+            setBoard(newBoard);
+            localStorage.setItem('boards', JSON.stringify(newBoard))
+        }
     }
 
     const handleChange = (event: React.FormEvent) => {
         const target = event.target as HTMLInputElement;
-        setTitleBoard(target.value)  
+        setTitleBoard(target.value)
+ 
     }
 
     const addBoard = (event: React.FormEvent) => {
         event.preventDefault()  
         const newBoard = {id: Math.random(), order: board.length + 1, title: titleBoard, items: []}
-        setBoard(prev => [...prev, newBoard]);
+        const test = [...board, newBoard];
+        setBoard(test);
+        localStorage.setItem('boards', JSON.stringify(test))
         setTitleBoard('');
+        setStateDisabled(true);
         
     }
 
     const deleteBoard = (id: number): void => {
         const newArr = board.filter((item) => item.id !== id);
         setBoard(newArr);
+        localStorage.setItem('boards', JSON.stringify(newArr))
     }
 
     const addTaskOnBoard = (tasksArr: TTask[], titleTask: string, id: number) => { 
@@ -117,7 +126,8 @@ const Main: React.FC = () => {
                 return {...item, items: newArrTask}
             } else{ return item}
         })
-        setBoard(newBoardAndTask);        
+        setBoard(newBoardAndTask);
+        localStorage.setItem('boards', JSON.stringify(newBoardAndTask))
     }
 
     const deleteTask = (task: TTask, idBoard: number) => {
@@ -131,11 +141,24 @@ const Main: React.FC = () => {
             } else {return board}
         })        
         setBoard(newBoardRemoveTask);
+        localStorage.setItem('boards', JSON.stringify(newBoardRemoveTask))
     }
 
     useEffect(() => {
-        console.log(board, 'board')
-    }, [board])
+        if (localStorage.getItem('boards') !== null) {
+            const boards = localStorage.getItem('boards');
+            setBoard(JSON.parse(boards!))
+            console.log(JSON.parse(boards!), 'testlocal')
+        }        
+    }, [])
+
+    useEffect(() => {
+        if (titleBoard.length >= 1 && titleBoard.length !== 0) {
+            setStateDisabled(false);
+        } else {setStateDisabled(true)}
+    }, [titleBoard])
+
+    const marginFooter = board.length <= 0 ? `${styles.paddingFooter}` : '';
 
     return (
         <>
@@ -144,13 +167,14 @@ const Main: React.FC = () => {
                     className={styles.сontrolPanel__input}
                     placeholder='Введите название раздела'
                     type="text"
+                    autoComplete="off"                    
                     value={titleBoard}
                     onChange={handleChange}
                 >                            
                 </input>
-                <button className={styles.сontrolPanel__button} name='addBoard' onClick={addBoard}>Добавить</button>
+                <button disabled={ stateDisabled} className={styles.сontrolPanel__button} name='addBoard' onClick={addBoard}>Добавить</button>
             </form>
-            <section className={styles.boards}>           
+            <section className={`${styles.boards} ${marginFooter}`}>           
                 {
                     board.map((board: TBoard, index: React.Key) => (
                         <Board

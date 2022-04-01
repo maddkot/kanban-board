@@ -15,6 +15,15 @@
     align-items: center;
     padding: 10px;
 
+    ::-webkit-scrollbar{
+        width: 2px;
+        height: 2px;
+    }
+    ::-webkit-scrollbar-thumb { 
+        border-radius: 5px; /*Закругление ползунка*/
+        background-color: #ccc;
+    }
+
     &__delete {
         width: 40px;
         height: 40px;
@@ -34,6 +43,33 @@
         transition: opacity 0.4s linear;
     }
 
+    &__title{
+        border-bottom: 1px solid $backgroundShadow;
+        width: 100%;        
+        max-width: inherit;
+        text-align: center;
+        overflow: auto;
+        min-height: 40px;
+        &:hover{
+            cursor: pointer
+        }
+    }
+
+    &__title:hover::before {        
+        content: "Тяните заголовок на другой заголовок";
+        position: absolute;
+        right: 45px;
+        top: -12px;
+        border-radius: 10px;
+        font-size: 10px;
+        line-height: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $backgroundShadow;
+        cursor: pointer
+    }
+
     &__section {
         display: flex;
         flex-grow: 1;
@@ -43,6 +79,7 @@
         justify-content: flex-start;
         width: 100%;
         overflow: auto;
+        height: inherit;
         
     }
 
@@ -78,11 +115,10 @@
             background-color: $deleteButtonBGC;
         }
     }
-
-
     
 }
 
 .dragBackground {
-    background: black //$dragBackgroundColor;
+   border: 3px dotted black;
+   border-radius: 10px;
 }

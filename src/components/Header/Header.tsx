@@ -12,7 +12,7 @@ export const Header = () => {
     return (
         <header className={styles.app}>
             <div className={styles.app__header}>
-                <h1>Kanban</h1>
+                <h1>Kanban board</h1>
                 <p className={styles.app__subtitle}>Simple and convenient</p>
             </div>
             <p className={styles.app__date}>{date}</p>        

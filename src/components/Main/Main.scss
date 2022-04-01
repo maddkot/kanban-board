@@ -1,19 +1,19 @@
 @import '../../styles/variables.scss';
 
 .boards {
-    margin: 15px auto 66px;
+    margin: 15px auto 70px;
     display: grid;
     grid-template-columns: repeat(4, minmax(auto, 282px));
     align-items: stretch;
     justify-content: space-around;
-    column-gap: 18px;
-    row-gap: 21px;
+    column-gap: 12px;
+    row-gap: 16px;
     
     @media screen and (max-width: 1300px) {
             grid-template-columns: repeat(3, minmax(auto, 282px));
         }
 
-    @media screen and (max-width: 883px) {       
+    @media screen and (max-width: 1005px) {       
             grid-template-columns: repeat(2, minmax(auto, 282px));     
     }
     
@@ -27,6 +27,9 @@
     margin: auto;
     display: flex;
     
+    @media screen and (max-width: 588px) {     
+        width: 250px;   
+}
        
     &__input {
         width: 100%;
@@ -46,21 +49,8 @@
         cursor: pointer;
     }
 }
-/* 
-@media screen and (max-width: 1300px) {
-    .main__boards {
-        grid-template-columns: repeat(3, minmax(auto, 282px));
-    }
-} */
 
-/* @media screen and (max-width: 883px) {
-    .main__boards {
-        grid-template-columns: repeat(2, minmax(auto, 282px));
-    }
+
+.paddingFooter{
+    margin-bottom: 70vh;
 }
-
-@media screen and (max-width: 588px) {
-    .main__boards {
-        grid-template-columns: repeat(1, minmax(auto, 282px))
-    }
-} */

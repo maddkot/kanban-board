@@ -24,25 +24,25 @@ type TTaskComponent = {
 
 const Task: React.FC<TTaskComponent> = ({ item, deleteTask, idBoard, changeTask, setIdboardAndTaskHandler }) => {
     
-    const { title } = item;
+    const { title } = item;    
 
     const dragStartHandlerTask = (event: React.DragEvent<HTMLElement>, idBoard: number) => {        
         setIdboardAndTaskHandler(idBoard, item);
     }
 
     const dragLeaveHandlerTask = (event: React.DragEvent<HTMLElement>) => {
-        //event.currentTarget.style.boxShadow = 'none';
+        event.currentTarget.style.boxShadow = 'none';
     }
 
     const dragEndHandlerTask = (event: React.DragEvent<HTMLElement>) => {
-        //event.currentTarget.style.boxShadow = 'none';
+        event.currentTarget.style.boxShadow = 'none';
     }
 
     const dragOverHandlerTask = (event: React.DragEvent<HTMLElement>) => {
         event.preventDefault();        
-        /* if (event.currentTarget.className.includes('task')) {            
+        if (event.currentTarget.className.includes('task')) {            
             event.currentTarget.style.boxShadow = '0 2px 3px gray';
-        } */
+        }
     }
     
 /*     const dropHandlerTask = (event: React.DragEvent<HTMLElement>) => {

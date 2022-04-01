@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import Task from '../Task/Task';
 import styles from './Board.scss';
 
@@ -32,44 +32,54 @@ const Board: React.FC<TBoardComponent> = ({ board, deleteBoard, setCurrentBoardH
     const {id, title, items } = board;
 
     const [titleTask, setTitleTask] = useState('');
+    const [stateDisabled, setStateDisabled] = useState<boolean>(true);
+    const [dragConturStyle, setDragConturStyle] = useState(null);
+    
 
     
     const handleChangeTaskTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTitleTask(event.target.value); 
-        
+        setTitleTask(event.target.value);         
     }
 
     const addTaskHandler = () => {        
         addTaskOnBoard(items, titleTask, id);
         setTitleTask('');
+        setStateDisabled(true);
     }
+
+    useEffect(() => {
+        if (titleTask.length >= 1) {
+            setStateDisabled(false);
+        } else { setStateDisabled(true) }
+    }, [titleTask]);
 
     const dragStartHandlerBoard = (event: React.DragEvent<HTMLElement>, board: TBoard) => {
         setCurrentBoardHandler(board);
+        setDragConturStyle(styles.dragBackground);
     }
 
     const dragLeaveHandlerBoard = (event: React.DragEvent<HTMLElement>) => {
-        
+        setDragConturStyle(null)
     }
 
     const dragEndHandlerBoard = (event: React.DragEvent<HTMLElement>) => {
         //const target = event.target as HTMLElement;
         //target.parentElement?.classList.remove('dragBackground');      
-        
+        setDragConturStyle(null)
     }
 
     const dragOverHandlerBoard = (event: React.DragEvent<HTMLElement>) => {
         event.preventDefault();
+        setDragConturStyle(styles.dragBackground);
         //const target = event.target as HTMLElement
        //target.parentElement?.classList.add('dragBackground');       
     }
 
     const dropHandlerBoard = (event: React.DragEvent<HTMLElement>, board: TBoard) => {
-        event.preventDefault();
+        event.preventDefault();        
         changeOrder(board);
+        setDragConturStyle(null)
     }
-
-
 
 
     //------------------------------
@@ -78,16 +88,16 @@ const Board: React.FC<TBoardComponent> = ({ board, deleteBoard, setCurrentBoardH
         event.preventDefault();        
     }
 
-    const dropHandlerTask = (event: React.DragEvent<HTMLElement>) => {
+    const dropHandlerTask = (event: React.DragEvent<HTMLElement>, id: number) => {
         changeTask(id);
-        
+        //event.currentTarget.style.boxShadow = 'none';       
     }
 
 
     return (
         <div className={styles.board}>
             <button className={styles.board__delete} onClick={()=> deleteBoard(id)}>+</button>
-            <h1
+            <h1 className={`${styles.board__title} ${dragConturStyle}`}
                 draggable={true}
                 onDragStart={event => dragStartHandlerBoard(event, board) }
                 onDragLeave={event => dragLeaveHandlerBoard(event) }
@@ -98,7 +108,7 @@ const Board: React.FC<TBoardComponent> = ({ board, deleteBoard, setCurrentBoardH
             <div className={styles.board__section}
                 draggable={true}
                 onDragOver={event => dragOverHandlerTask(event ) }            
-                onDrop={ event => dropHandlerTask(event)}
+                onDrop={ event => dropHandlerTask(event, id)}
             >
                 {
                     items.map(item => (
@@ -115,7 +125,7 @@ const Board: React.FC<TBoardComponent> = ({ board, deleteBoard, setCurrentBoardH
             </div>
             <div className={ styles.board__addBox}>
                 <input value={titleTask } onChange={handleChangeTaskTitle } className={ styles.board__addBox__input} type="text" placeholder='Введите задачу'/>
-                <button className={ styles.board__addBox__button} onClick={addTaskHandler}>Добавить задачу</button>
+                <button disabled={ stateDisabled} className={ styles.board__addBox__button} onClick={addTaskHandler}>Добавить задачу</button>
             </div>
         </div>
     )
