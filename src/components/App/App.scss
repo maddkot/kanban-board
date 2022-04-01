@@ -1,0 +1,13 @@
+@import url(../../styles/normalize.css);
+
+$bc: rgb(200, 225, 201);
+
+.app {
+    background-color: $bc;
+    background-image: url(../../images/background.JPG);
+    background-repeat: repeat;
+    min-height:  100vh;
+    min-width: 320px;
+    font-family: "Inter", "Arial", "Helvetica", sans-serif;
+    margin: auto;
+}
